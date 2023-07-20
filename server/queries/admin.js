@@ -76,7 +76,13 @@ const login = async (req, res) => {
   }
 };
 
+const logout = async (req, res) => {
+  res.clearCookie("token");
+  res.status(200).json({ data: { name: "", email: "" } });
+};
+
 module.exports = {
   registerUser,
   login,
+  logout,
 };

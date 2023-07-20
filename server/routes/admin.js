@@ -5,5 +5,6 @@ const db = require("../queries/admin");
 
 router.post("/admin/register", db.registerUser);
 router.post("/admin/login", db.login);
+router.get("/admin/logout", db.logout);
 
 module.exports = router;
