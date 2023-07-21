@@ -15,7 +15,7 @@ const pool = new Pool({
 });
 
 const CREATE_USERS_TABLE_IF_NOT_EXISTS_QUERY =
-  "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, name VARCHAR(50) NOT NULL, email VARCHAR(255) NOT NULL UNIQUE, password VARCHAR(255) NOT NULL)";
+  "CREATE TABLE IF NOT EXISTS users (user_id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY, name VARCHAR(50) NOT NULL, email VARCHAR(255) NOT NULL UNIQUE, password VARCHAR(255) NOT NULL)";
 
 const registerUser = async (req, res) => {
   try {
@@ -39,7 +39,7 @@ const registerUser = async (req, res) => {
         (err, results) => {
           if (err) throw err;
           res.status(201).json({
-            data: `User created with ID: ${results.rows[0].id}`,
+            data: `User created with ID: ${results.rows[0].user_id}`,
           });
         }
       );
@@ -68,7 +68,7 @@ const login = async (req, res) => {
     if (!isPasswordValid)
       return res.status(401).json({ message: "Invalidate password" });
 
-    const token = jwt.sign({ userId: user.id }, jwtSecret);
+    const token = jwt.sign({ id: user.user_id, name: user.name }, jwtSecret);
     res.cookie("token", token, { httpOnly: true });
     res.status(200).json({ data: { name: user.name, email: user.email } });
   } catch (error) {
