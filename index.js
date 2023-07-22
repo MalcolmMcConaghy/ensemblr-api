@@ -7,7 +7,7 @@ const methodOverride = require("method-override");
 const session = require("express-session");
 
 const app = express();
-const PORT = 3000 || process.env.PORT;
+const PORT = 80 || process.env.PORT;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -41,6 +41,10 @@ app.use(
     },
   })
 );
+
+app.get("/", (req, res) => {
+  res.send("AWS Fargate check on port 80");
+});
 
 app.use("/api/v1", require("./server/routes/admin"));
 app.use("/api/v1", require("./server/routes/organizations"));
