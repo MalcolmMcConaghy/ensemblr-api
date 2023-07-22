@@ -7,11 +7,11 @@ const jwtSecret = process.env.TOKEN_SECRET;
 
 const Pool = require("pg").Pool;
 const pool = new Pool({
-  user: process.env.DOCKER_USER,
-  host: "localhost",
-  database: process.env.DOCKER_DB,
-  password: process.env.DOCKER_PASSWORD,
-  port: 5432,
+  user: process.env.PG_USER,
+  host: process.env.PG_HOST,
+  database: process.env.PG_DB,
+  password: process.env.PG_PASSWORD,
+  port: process.env.PG_PORT || 5432,
 });
 
 const CREATE_USERS_TABLE_IF_NOT_EXISTS_QUERY =
@@ -44,10 +44,11 @@ const registerUser = async (req, res) => {
         }
       );
     } catch (error) {
-      res.status(500).json({ message: "Internal server error" });
+      res.status(500).json({ message: "Internal server error in insert" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
+    console.log(error.message);
+    res.status(500).json({ message: "Internal server error on query" });
   }
 };
 
